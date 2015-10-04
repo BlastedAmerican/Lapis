@@ -1,0 +1,307 @@
+<html>
+<head>
+<title>
+NEED SLEEP
+</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+  //set up the default arrays for user in other areas.
+  //savedUserArray = ["rock"];
+ // savedUserArrayValues = ["0"];
+</script>
+
+
+<script>
+
+var dictonaryTop = [];
+
+getIndicioData = function (inputText, inputCount)  
+{
+$.ajax({
+  url: "https://apiv2.indico.io/texttags/batch?key=6557d564956716927c6a5488cd8b3963",
+  //texttags
+  //keywords
+  type: "POST", 
+  data: JSON.stringify({"data": [inputText], "top_n": inputCount}), 
+  success: function (data) {
+    myString = data.substring(13,data.length-2);
+    myArray = myString;
+    
+
+
+    var myRegex = /"*"/;
+
+
+
+    var mynewString = myRegex.exec(myString);
+
+    var splitArray = myString.split(",")
+    
+    for (var i = splitArray.length - 1; i >= 0; i--) 
+    {
+      tempArray = splitArray[i].split(":");
+      dictonaryTop[i] = tempArray[0];
+      //console.log(tempArray[0]);
+      //console.log(dictonaryTop[i]);
+    };
+    for (var i =  0; i <= dictonaryTop.length - 1; i++) 
+    {
+      strippingToValue = dictonaryTop[i].replace("\"","");
+      strippingToValue = strippingToValue.replace("\"","");
+      strippingToValue = strippingToValue.replace("\{","");
+      strippingToValue = strippingToValue.replace(" ","");
+
+      dictonaryTop[i] = strippingToValue;
+
+
+     // console.log(strippingToValue);
+      //console.log("STARTOPen");
+      //console.log(dictonaryTop[i]);
+      //console.log("ENDOPen");
+
+
+
+    }
+    console.log(dictonaryTop);
+    return dictonaryTop;
+   
+
+
+    //console.log(splitArray);
+
+    //console.log(myArray[0]);
+  }, error: function(err) {
+    console.log(err);
+  }
+   
+})
+return dictonaryTop;
+  
+  
+
+}
+
+//Take an array
+//Strip and perform analysis on the incoming data
+startAnalysis = function ( inputText, mainDataArray, userInput, inputHeartData )
+{
+  
+  mainDataArray = [];
+
+  for (var i = inputText.length - 1; i >= 0; i--) {
+    outputData = getIndicioData(inputText[i]);  
+  };
+
+}
+
+performIndicioAnalysis = function()
+{
+//  debugger;
+  //console.log(document.getElementById("mainTextInput").value);
+  //console.log(document.getElementById("DetailLevel").value);
+  valueConversionToID = parseInt(document.getElementById("DetailLevel").value);
+
+
+  userResponse = getIndicioData( document.getElementById("mainTextInput").value, valueConversionToID );
+  //setTimeout(console.log(userResponse),10000);
+  //console.log(  userResponse = getIndicioData( document.getElementById("mainTextInput").value, valueConversionToID ));
+  //console.log("AAAAB");
+  //console.log(userResponse);
+  //console.log("AAAAB");
+  //console.log("FIRE THE LAZERSSSS");
+
+  //updateDisplayInformation(userResponse, 1);
+}
+
+
+
+</script>
+
+<span style="position:fixed; right:40%">
+ Things That User Likes <br>
+ <span id = "likeAble1"> 1. Nothing Yet. Score: 0</span><br>
+ <span id = "likeAble2"> 2. Nothing Yet. Score: 0</span><br>
+ <span id = "likeAble3"> 3. Nothing Yet. Score: 0</span><br>
+ <span id = "likeAble4"> 4. Nothing Yet. Score: 0</span><br>
+ <span id = "likeAble5"> 5. Nothing Yet. Score: 0</span><br>
+
+</span>
+<span style="position:fixed; right:10%">
+ Things User Does Not Like<br>
+ <span id = "dislikeAble1"> 1. Nothing Yet. Score: 0</span><br>
+ <span id = "dislikeAble2"> 2. Nothing Yet. Score: 0</span><br>
+ <span id = "dislikeAble3"> 3. Nothing Yet. Score: 0</span><br>
+ <span id = "dislikeAble4"> 4. Nothing Yet. Score: 0</span><br>
+ <span id = "dislikeAble5"> 5. Nothing Yet. Score: 0</span><br>
+</span>
+
+
+<textarea id = "mainTextInput" rows="4" cols="50">
+Paste your text in here, and click like or dislike to start analyzation!
+</textarea>
+<br>
+Detail Level:<br> <input id="DetailLevel" type="text" name="fname"><br><br>
+<form>
+  <input type="radio" id ="LikedButton" name="reaction" value="Like" checked>Like
+  <br>
+  <input type="radio" id = "DislikedButton" name="reaction" value="Dislike">Dislike
+</form>
+
+<script>
+
+  var savedUserArray = ["rock"];
+  var savedUserArrayValues = [0];
+  updateDisplayInformation = function( userResponseArray, valueResponse)
+  {
+    console.log("UPDATE DATA DISPLAY");
+
+
+    //console.log("AAAA");
+    console.log(userResponseArray);
+  //  console.log("AAAA");
+
+    for (var i = 0; i <= userResponseArray.length - 1; i++) {
+      matchFoundFlag = false;
+      for (var iHATETHIS = 0 ; iHATETHIS <= savedUserArray.length; iHATETHIS++) 
+      {
+        if(savedUserArray[iHATETHIS] == userResponseArray[i])
+        {
+           savedUserArrayValues[iHATETHIS] = savedUserArrayValues[iHATETHIS] + valueResponse;
+           matchFoundFlag = true;
+         }    
+
+        }
+      if(!matchFoundFlag)
+      {
+          savedUserArray[savedUserArray.length] = userResponseArray[i]
+
+          savedUserArrayValues[savedUserArrayValues.length] = valueResponse;
+      }
+
+
+
+    };
+    //console.log("START LOGGING");
+    console.log(savedUserArray);
+    console.log(savedUserArrayValues);
+   // console.log("END LOGGING");
+
+  }
+
+  logData = function ()
+  {
+    console.log(dictonaryTop);
+
+    relationValue = -1;
+
+    if(document.getElementById("LikedButton").checked)
+    {
+      relationValue = 1;
+    }
+
+    updateDisplayInformation(dictonaryTop,relationValue);
+  }
+
+  parseAndDisplayData = function()
+  {
+    //savedUserArray
+    //savedUserArrayValues
+    slot1 = -1000;
+    slot2 = -1000;
+    slot3 = -1000;
+    slot4 = -1000;
+    slot5 = -1000;
+    slot1value = -1000;
+    slot2value = -1000;
+    slot3value = -1000;
+    slot4value = -1000;
+    slot5value = -1000;
+
+    console.log(savedUserArrayValues);
+    console.log(savedUserArray);
+
+
+    for(var currentPos = 0; currentPos < savedUserArrayValues.length; currentPos++ )
+    {
+      //console.log(savedUserArrayValues[currentPos]);
+      //console.log(slot1value);
+      //debugger;
+      if( savedUserArrayValues[currentPos] > slot1value )
+      {
+        slot2 = slot1;
+        slot2value = slot1value;
+        slot1 = currentPos;
+        slot1value = savedUserArrayValues[currentPos];
+      }
+      else if(savedUserArrayValues[currentPos] > slot2value )
+      {
+        slot3 = slot2;
+        slot3value = slot2value;
+
+        slot2 = currentPos;
+        slot2value = savedUserArrayValues[currentPos];
+      }
+      else if(savedUserArrayValues[currentPos] > slot3value )
+      {
+        slot4 = slot3;
+        slot4value = slot3value;
+
+
+
+        slot3 = currentPos;
+        slot3value = savedUserArrayValues[currentPos];
+      }
+      else if(savedUserArrayValues[currentPos] > slot4value )
+      {
+        slot5 = slot4;
+        slot5value = slot4value;
+
+        slot4 = currentPos;
+        slot4value = savedUserArrayValues[currentPos];
+      }
+      else if(savedUserArrayValues[currentPos] > slot5value )
+      {
+        slot5 = currentPos;
+        slot5value = savedUserArrayValues[currentPos];
+      }
+
+
+    }
+    document.getElementById("likeAble1").innerHTML = savedUserArray[slot1] + " Value: " + savedUserArrayValues[slot1];
+    document.getElementById("likeAble2").innerHTML = savedUserArray[slot2] + " Value: " + savedUserArrayValues[slot2];
+    document.getElementById("likeAble3").innerHTML = savedUserArray[slot3] + " Value: " + savedUserArrayValues[slot3];
+    document.getElementById("likeAble4").innerHTML = savedUserArray[slot4] + " Value: " + savedUserArrayValues[slot4];
+    document.getElementById("likeAble5").innerHTML = savedUserArray[slot5] + " Value: " + savedUserArrayValues[slot5];
+
+  }
+
+
+
+
+
+</script>
+
+
+
+
+<button onclick="performIndicioAnalysis()">Analyze Text</button>
+
+<button onclick="updateDisplayInformation( dictonaryTop, 1)">Update Visable Data</button>
+
+<button onclick="logData()">LOG DATA</button>
+
+<button onclick="parseAndDisplayData()">Parse And Display</button>
+
+
+
+
+
+
+
+</body>
+</html>
+
