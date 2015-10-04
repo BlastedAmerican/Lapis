@@ -1,3 +1,6 @@
+PLEASE NOTE: THE CURRENT finalproduct.html DOES NOT HAVE AN API KEY. YOU WILL NEED TO REPLACE YOUR_API_KEY_HERE WITH YOUR API KEY TO HAVE THIS FUNCTION.
+
+
 the finalproduct.html file is the basic setup with the Indicio 
 IO setup. While its currently displaying this information as a webpage,
 it has enough functions to pass in a block of text, along with a positive or
